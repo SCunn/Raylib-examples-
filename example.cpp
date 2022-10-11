@@ -1,24 +1,24 @@
-// #include "raylib.h"
-#include <cstdio>
+#include "raylib.h"
+// #include <cstdio>
 // #define LIGHTGRAY (Color){ 200, 200, 200, 255 }
 
-
-int main(){
-    printf("hello world");
-}
+// init main printf
+// int main(){
+//     printf("hello world");
+// }
 
 
 // Draw Window
-// int main(){
-//     int WindowSize{250};
-//     char WindowName[] = "Game Window";
-//     InitWindow(WindowSize,WindowSize,WindowName);
-//     while(WindowShouldClose() == 0){
-//         BeginDrawing();
-//         ClearBackground(BLUE);
-//         EndDrawing();
-//     }
-// }
+int main(){
+    int WindowSize{250};
+    char WindowName[] = "Game Window";
+    InitWindow(WindowSize,WindowSize,WindowName);
+    while(WindowShouldClose() == 0){
+        BeginDrawing();
+        ClearBackground(BLUE);
+        EndDrawing();
+    }
+}
 
 // Char example
 // int main(){
