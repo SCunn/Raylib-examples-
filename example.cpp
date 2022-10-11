@@ -1,5 +1,11 @@
-#include "raylib.h"
-#define LIGHTGRAY (Color){ 200, 200, 200, 255 }
+// #include "raylib.h"
+#include <cstdio>
+// #define LIGHTGRAY (Color){ 200, 200, 200, 255 }
+
+
+int main(){
+    printf("hello world");
+}
 
 
 // Draw Window
@@ -119,45 +125,45 @@
 // }
 
 // If Statement,move circle, bounce rectangle
-int main(){
-    int WindowSize[] = {500,500};
-    char WindowName[] = "Game Window";
-    int circle_posX = 250;
-    int circle_posY = 250;
-    int circle_radius = 10;
-    int rect_posX = 400;
-    int rect_posY = 400;
-    int rect_Width = 15;
-    int rect_Height = 15;
-    int direction = 10;
-    InitWindow(WindowSize[1],WindowSize[0],WindowName);
-    SetTargetFPS(60);
-    while(!WindowShouldClose()){
-        BeginDrawing();
-        ClearBackground(WHITE);
-        DrawCircle(circle_posX, circle_posY, circle_radius, RED);
-        DrawRectangle(rect_posX, rect_posY, rect_Width, rect_Height, GREEN);
-        // DrawText(winTxt,txt_posX,txt_posY,font_Size[3],LIGHTGRAY);
-        if(IsKeyDown(KEY_D)){
-            circle_posX = circle_posX+10;
-        }
-        if(IsKeyDown(KEY_A)){
-            circle_posX = circle_posX-10;
-        }
-        if(IsKeyDown(KEY_S)){
-            circle_posY = circle_posY+10;
-        }
-        if(IsKeyDown(KEY_W)){
-            circle_posY = circle_posY-10;
-        }
-        // rect_posY += direction;
-        rect_posY = rect_posY + direction;
-        if (rect_posY < 0 || rect_posY > 400){
-            direction *= -1;
-        }
-        EndDrawing();
-    }
-}
+// int main(){
+//     int WindowSize[] = {500,500};
+//     char WindowName[] = "Game Window";
+//     int circle_posX = 250;
+//     int circle_posY = 250;
+//     int circle_radius = 10;
+//     int rect_posX = 400;
+//     int rect_posY = 400;
+//     int rect_Width = 15;
+//     int rect_Height = 15;
+//     int direction = 10;
+//     InitWindow(WindowSize[1],WindowSize[0],WindowName);
+//     SetTargetFPS(60);
+//     while(!WindowShouldClose()){
+//         BeginDrawing();
+//         ClearBackground(WHITE);
+//         DrawCircle(circle_posX, circle_posY, circle_radius, RED);
+//         DrawRectangle(rect_posX, rect_posY, rect_Width, rect_Height, GREEN);
+//         // DrawText(winTxt,txt_posX,txt_posY,font_Size[3],LIGHTGRAY);
+//         if(IsKeyDown(KEY_D)){
+//             circle_posX = circle_posX+10;
+//         }
+//         if(IsKeyDown(KEY_A)){
+//             circle_posX = circle_posX-10;
+//         }
+//         if(IsKeyDown(KEY_S)){
+//             circle_posY = circle_posY+10;
+//         }
+//         if(IsKeyDown(KEY_W)){
+//             circle_posY = circle_posY-10;
+//         }
+//         // rect_posY += direction;
+//         rect_posY = rect_posY + direction;
+//         if (rect_posY < 0 || rect_posY > 400){
+//             direction *= -1;
+//         }
+//         EndDrawing();
+//     }
+// }
 
 
 
