@@ -1,4 +1,6 @@
 #include "raylib.h"
+
+
 // #include <cstdio>
 // #define LIGHTGRAY (Color){ 200, 200, 200, 255 }
 
@@ -125,45 +127,135 @@
 // }
 
 // If Statement,move circle, bounce rectangle
+// int main(){
+//     int WindowSize[] = {500,500};
+//     char WindowName[] = "Game Window";
+//     int circle_posX = 250;
+//     int circle_posY = 250;
+//     int circle_radius = 10;
+//     int rect_posX = 400;
+//     int rect_posY = 400;
+//     int rect_Width = 15;
+//     int rect_Height = 15;
+//     int direction = 10;
+//     InitWindow(WindowSize[1],WindowSize[0],WindowName);
+//     SetTargetFPS(60);
+//     while(!WindowShouldClose()){
+//         BeginDrawing();
+//         ClearBackground(WHITE);
+//         DrawCircle(circle_posX, circle_posY, circle_radius, RED);
+//         DrawRectangle(rect_posX, rect_posY, rect_Width, rect_Height, GREEN);
+//         // DrawText(winTxt,txt_posX,txt_posY,font_Size[3],LIGHTGRAY);
+//         if(IsKeyDown(KEY_D)){
+//             circle_posX = circle_posX+10;
+//         }
+//         if(IsKeyDown(KEY_A)){
+//             circle_posX = circle_posX-10;
+//         }
+//         if(IsKeyDown(KEY_S)){
+//             circle_posY = circle_posY+10;
+//         }
+//         if(IsKeyDown(KEY_W)){
+//             circle_posY = circle_posY-10;
+//         }
+//         // rect_posY += direction;
+//         rect_posY = rect_posY + direction;
+//         if (rect_posY < 0 || rect_posY > 400){
+//             direction *= -1;
+//         }
+//         EndDrawing();
+//     }
+// }
+
+
 int main(){
-    int WindowSize[] = {500,500};
-    char WindowName[] = "Game Window";
-    int circle_posX = 250;
-    int circle_posY = 250;
-    int circle_radius = 10;
-    int rect_posX = 400;
-    int rect_posY = 400;
-    int rect_Width = 15;
-    int rect_Height = 15;
-    int direction = 10;
-    InitWindow(WindowSize[1],WindowSize[0],WindowName);
+
+    const int windowWidth{500};
+    const int windowHeight{500};
+    const int width{50};
+    const int height{50};
+    const int gravity{-1};
+
+    int posY{windowHeight-height};
+    int velocity{0};
+
+
+    InitWindow(windowWidth, windowHeight,"Game Window");
+    Texture2D scarfy =  LoadTexture("resources/scarfy.png");
+
+    Rectangle scarfyRec;
+    scarfyRec.width = scarfy.width/6;
+    scarfyRec.height = scarfy.height;
+    scarfyRec.x = 0;
+    scarfyRec.y = 0; 
+    Vector2 scarfyPos;
+    scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
+    scarfyPos.y = windowHeight - scarfyRec.height;
+
+
+
     SetTargetFPS(60);
     while(!WindowShouldClose()){
         BeginDrawing();
         ClearBackground(WHITE);
-        DrawCircle(circle_posX, circle_posY, circle_radius, RED);
-        DrawRectangle(rect_posX, rect_posY, rect_Width, rect_Height, GREEN);
-        // DrawText(winTxt,txt_posX,txt_posY,font_Size[3],LIGHTGRAY);
-        if(IsKeyDown(KEY_D)){
-            circle_posX = circle_posX+10;
+        DrawRectangle(windowWidth/2,posY,width,height,GREEN);
+        if(IsKeyPressed(KEY_SPACE)){
+            velocity -= 10;
         }
-        if(IsKeyDown(KEY_A)){
-            circle_posX = circle_posX-10;
-        }
-        if(IsKeyDown(KEY_S)){
-            circle_posY = circle_posY+10;
-        }
-        if(IsKeyDown(KEY_W)){
-            circle_posY = circle_posY-10;
-        }
-        // rect_posY += direction;
-        rect_posY = rect_posY + direction;
-        if (rect_posY < 0 || rect_posY > 400){
-            direction *= -1;
-        }
+        posY += velocity;
+        // velocity -= gravity;
+
+        // DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
+
         EndDrawing();
     }
+    CloseWindow();
+
+
 }
+
+
+// int main()
+// {
+//     const int windowWidth{500};
+//     const int windowHeight{500};
+//     const int width{50};
+//     const int height{50};
+//     int posY{windowHeight - height};
+//     int velocity{-5};
+//     int direction = -1;
+
+//     InitWindow(windowWidth, windowHeight, "Raylib Template - Joe O'Regan");
+//     Texture2D scarfy = LoadTexture("resources/scarfy.png");
+//     Rectangle scarfyRec;
+//     scarfyRec.width = scarfy.width / 6;
+//     scarfyRec.height = scarfy.height;
+//     scarfyRec.x = 0;
+//     scarfyRec.y = 0;
+//     Vector2 scarfyPos;
+//     scarfyPos.x = windowWidth / 2 - scarfyRec.width / 2;
+//     scarfyPos.y = windowHeight - scarfyRec.height;
+
+//     SetTargetFPS(60);
+
+//     while (!WindowShouldClose())
+//     {
+//         BeginDrawing();
+
+//         ClearBackground(WHITE);
+
+//         DrawRectangle(windowWidth / 2, (posY += velocity), width, height, GREEN);
+
+//         if (posY <= 200 || posY >= 450)
+//             velocity *= -1; // reverse direction
+
+//         EndDrawing();
+//     }
+
+//     CloseWindow();
+
+    
+// } 
 
 
 
