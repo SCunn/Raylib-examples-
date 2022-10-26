@@ -172,22 +172,28 @@ int main(){
 
     const int windowWidth{500};
     const int windowHeight{500};
-    const int width{50};
-    const int height{50};
-    const int gravity{-1};
-
-    int posY{windowHeight-height};
-    int velocity{0};
-
-
+    
     InitWindow(windowWidth, windowHeight,"Game Window");
-    Texture2D scarfy =  LoadTexture("resources/scarfy.png");
+    const int width{50};
+    const int height{80};
+    // posY = windowHeight{500} - height{80}
+    int posY{windowHeight-height};
+    int velocity{10};
+    const int gravity{1};
 
+    bool IsJumping = false;
+
+    
+
+    // Locate and load the texture file in the resources folder
+    Texture2D scarfy =  LoadTexture("resources/scarfy.png");
+    // Rectangle that will contain the texture sprite
     Rectangle scarfyRec;
     scarfyRec.width = scarfy.width/6;
     scarfyRec.height = scarfy.height;
     scarfyRec.x = 0;
     scarfyRec.y = 0; 
+    // Vector2 is the position of the line on X and Y axis
     Vector2 scarfyPos;
     scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
     scarfyPos.y = windowHeight - scarfyRec.height;
@@ -197,16 +203,33 @@ int main(){
     SetTargetFPS(60);
     while(!WindowShouldClose()){
         BeginDrawing();
-        ClearBackground(WHITE);
+        
+        DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
+        
+        // void DrawRectangle(int posX(250), int posY(450), int width(50), int height(50), Color color)
         DrawRectangle(windowWidth/2,posY,width,height,GREEN);
-        if(IsKeyPressed(KEY_SPACE)){
-            velocity -= 10;
+        // if posY is greater or equal to 420
+        if (posY >= windowHeight - height){
+            // slow velocity
+            velocity = 0;
+            IsJumping = false;
+
+        } else {
+            velocity += gravity;
+            IsJumping = 1;
         }
+
+        // velocity = 0; if space is pressed, velocity = -10, making object jump.  and if IsJumping is not true, allow velocity(object) jump by -10
+        if(IsKeyPressed(KEY_SPACE) && !IsJumping){
+            // Move object up by 10
+            velocity -= 10;
+             
+        }
+        
         posY += velocity;
-        // velocity -= gravity;
 
-        // DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
-
+        // Colour background of window
+        ClearBackground(WHITE);
         EndDrawing();
     }
     CloseWindow();
