@@ -1,5 +1,7 @@
 #include "raylib.h"
 
+
+
 int main(){
 
     const int windowWidth{500};
@@ -9,9 +11,12 @@ int main(){
     int velocity{10};
     // set to 1000 for delta time, change gravity to pixels per second
     const int gravity{1000};
+    // integer to move sprite
+    int speed{250};
     // change jumpHeight to pixels per second
     int jumpHeight{500};
     bool IsJumping = false;
+ 
     // data for animation goes here
     int frame{};
     // Update the animation speed, takes 1 second then divides it by 12
@@ -40,28 +45,21 @@ int main(){
         // Get time in seconds for the last frame drawn (delta time)
         const float deltaTime{GetFrameTime()};
         BeginDrawing();
-        // // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
-        // scarfyRec.x = frame * scarfyRec.width;
-        // // Increment frame by 1, cycle through .png frames
-        // frame++;
-        // // if the frame count gets greater than 6
-        // if(frame > 6){
-        //     // set frame count back to zero in order to restart cycle through .png frames
-        //     frame = 0;
-        // }
 
-        runningTime += deltaTime; 
+            //     runningTime += deltaTime; 
 
-         if(runningTime >= updateTime){
-            runningTime = 0.0;
-            scarfyRec.x = frame* scarfyRec.width;
-            frame++;
-         if (frame>5){
-         frame = 0;
-         }
-	}
-
-
+            //  if(runningTime >= updateTime){
+            //     runningTime = 0.0;
+            //     // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
+            //     scarfyRec.x = frame* scarfyRec.width;
+            //     // Increment frame by 1, cycle through .png frames
+            //     frame++;
+            //     // if the frame count gets greater than 6
+            //  if (frame > 5){
+            //     // set frame count back to zero in order to restart cycle through .png frames
+            //     frame = 0;
+            //  }
+	        // }
         
         DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
 
@@ -75,6 +73,61 @@ int main(){
             // multiply gravity & velocity by delta time
             velocity += gravity * deltaTime;
             IsJumping = 1;
+        }
+
+        if(IsKeyDown(KEY_D) && !IsJumping){
+            scarfyPos.x = scarfyPos.x += speed*deltaTime;
+            scarfyRec.width = scarfy.width/6;
+            
+            
+            runningTime += deltaTime; 
+
+             if(runningTime >= updateTime){
+                runningTime = 0.0;
+                // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
+                scarfyRec.x = frame* scarfyRec.width;
+                // Increment frame by 1, cycle through .png frames
+                frame++;
+                // if the frame count gets greater than 6
+             if (frame > 5){
+                // set frame count back to zero in order to restart cycle through .png frames
+                frame = 0;
+             }
+	        }
+        }
+        // When D key is released and sprite is not jumping
+        if(IsKeyReleased(KEY_D) && !IsJumping){
+            // reset frame back to zero, revert sprite to first frame
+            frame = 0;
+            scarfyRec.x = frame * scarfyRec.width;
+        }
+
+        if(IsKeyDown(KEY_A) && !IsJumping){
+            scarfyPos.x -= speed*deltaTime;
+            scarfyRec.width = -scarfy.width/6;
+            
+            
+            runningTime += deltaTime; 
+
+             if(runningTime >= updateTime){
+                runningTime = 0.0;
+                // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
+                scarfyRec.x = frame* scarfyRec.width;
+                // Increment frame by 1, cycle through .png frames
+                frame++;
+                // if the frame count gets greater than 6
+             if (frame > 5){
+                // set frame count back to zero in order to restart cycle through .png frames
+                frame = 0;
+             }
+	        }
+        }
+
+                // When A key is released and sprite is not jumping
+        if(IsKeyReleased(KEY_A) && !IsJumping){
+            // reset frame back to zero, revert sprite to first frame
+            frame = 0;
+            scarfyRec.x = frame * scarfyRec.width;
         }
 
         // velocity = 0; if space is pressed, velocity = -10, making object jump.  and if IsJumping is not true, allow velocity(object) jump by -10
@@ -94,6 +147,9 @@ int main(){
 
 
 }
+
+
+
 
 
 
