@@ -12,7 +12,12 @@ int main(){
     // change jumpHeight to pixels per second
     int jumpHeight{500};
     bool IsJumping = false;
-
+    // data for animation goes here
+    int frame{};
+    // Update the animation speed, takes 1 second then divides it by 12
+    const float updateTime{1.0/12};
+    // float to contain the running time data
+    float runningTime{};
     
 
     // Locate and load the texture file in the resources folder
@@ -35,6 +40,28 @@ int main(){
         // Get time in seconds for the last frame drawn (delta time)
         const float deltaTime{GetFrameTime()};
         BeginDrawing();
+        // // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
+        // scarfyRec.x = frame * scarfyRec.width;
+        // // Increment frame by 1, cycle through .png frames
+        // frame++;
+        // // if the frame count gets greater than 6
+        // if(frame > 6){
+        //     // set frame count back to zero in order to restart cycle through .png frames
+        //     frame = 0;
+        // }
+
+        runningTime += deltaTime; 
+
+         if(runningTime >= updateTime){
+            runningTime = 0.0;
+            scarfyRec.x = frame* scarfyRec.width;
+            frame++;
+         if (frame>5){
+         frame = 0;
+         }
+	}
+
+
         
         DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
 
