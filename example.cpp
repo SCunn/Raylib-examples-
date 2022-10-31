@@ -14,7 +14,7 @@ int main(){
     // integer to move sprite
     int speed{250};
     // obstacle Velocity
-    int obVel{-100};
+    int obVel{-300};
     // change jumpHeight to pixels per second
     int jumpHeight{500};
     bool IsJumping = false;
@@ -154,6 +154,8 @@ int main(){
         }
         // multiply velocity by delta time
         scarfyPos.y += velocity * deltaTime;
+        // add velocity to obstacle
+        obPos.x += obVel * deltaTime;
 
         // Colour background of window
         ClearBackground(WHITE);
