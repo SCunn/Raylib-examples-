@@ -13,6 +13,8 @@ int main(){
     const int gravity{1000};
     // integer to move sprite
     int speed{250};
+    // obstacle Velocity
+    int obVel{-100};
     // change jumpHeight to pixels per second
     int jumpHeight{500};
     bool IsJumping = false;
@@ -27,6 +29,7 @@ int main(){
 
     // Locate and load the texture file in the resources folder
     Texture2D scarfy =  LoadTexture("resources/scarfy.png");
+    Texture2D obstacle = LoadTexture("resources/Raylib_logo.png");
     // Rectangle that will contain the texture sprite
     Rectangle scarfyRec;
     scarfyRec.width = scarfy.width/6;
@@ -37,6 +40,16 @@ int main(){
     Vector2 scarfyPos;
     scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
     scarfyPos.y = windowHeight - scarfyRec.height;
+
+    //  Variables for obstacle
+    Rectangle obRec;
+    obRec.width = obstacle.width;
+    obRec.height = obstacle.height; 
+    obRec.x = 0;
+    obRec.y = 0;
+    Vector2 obPos; 
+    obPos.x = windowWidth- obRec.width;
+    obPos.y = windowHeight - obRec.height;
 
 
 
@@ -62,6 +75,9 @@ int main(){
 	        // }
         
         DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
+
+        DrawTextureRec(obstacle, obRec, obPos, WHITE);
+
 
         // if scarfyPosY is greater or equal to 420
         if (scarfyPos.y >= windowHeight - scarfyRec.height){
@@ -143,6 +159,8 @@ int main(){
         ClearBackground(WHITE);
         EndDrawing();
     }
+    UnloadTexture(scarfy);
+    UnloadTexture(obstacle);
     CloseWindow();
 
 
