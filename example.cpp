@@ -7,8 +7,10 @@ int main(){
     
     InitWindow(windowWidth, windowHeight,"Game Window");
     int velocity{10};
-    const int gravity{1};
-
+    // set to 1000 for delta time, change gravity to pixels per second
+    const int gravity{1000};
+    // change jumpHeight to pixels per second
+    int jumpHeight{500};
     bool IsJumping = false;
 
     
@@ -30,29 +32,32 @@ int main(){
 
     SetTargetFPS(60);
     while(!WindowShouldClose()){
+        // Get time in seconds for the last frame drawn (delta time)
+        const float deltaTime{GetFrameTime()};
         BeginDrawing();
         
         DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
 
-        // if posY is greater or equal to 420
+        // if scarfyPosY is greater or equal to 420
         if (scarfyPos.y >= windowHeight - scarfyRec.height){
             // slow velocity
             velocity = 0;
             IsJumping = false;
 
         } else {
-            velocity += gravity;
+            // multiply gravity & velocity by delta time
+            velocity += gravity * deltaTime;
             IsJumping = 1;
         }
 
         // velocity = 0; if space is pressed, velocity = -10, making object jump.  and if IsJumping is not true, allow velocity(object) jump by -10
         if(IsKeyPressed(KEY_SPACE) && !IsJumping){
             // Move object up by 10
-            velocity -= 20;
+            velocity -= jumpHeight;
              
         }
-        
-        scarfyPos.y += velocity;
+        // multiply velocity by delta time
+        scarfyPos.y += velocity * deltaTime;
 
         // Colour background of window
         ClearBackground(WHITE);
