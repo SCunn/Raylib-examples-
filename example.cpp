@@ -1,46 +1,37 @@
 #include "raylib.h"
 
-
+// structs are used to group related variables to one place, struct Anim hold variables related to the animation logic
+struct Anim {
+    Rectangle rec;
+    // Vector2 is the position of the line on X and Y axis
+    Vector2 pos;
+    int frame;
+    float updateTime;
+    float runningTime;
+};
 
 int main(){
 
-    const int windowWidth{500};
-    const int windowHeight{500};
+    const int windowWidth{700};
+    const int windowHeight{450};
     
     InitWindow(windowWidth, windowHeight,"Game Window");
-    int velocity{10};
-    // set to 1000 for delta time, change gravity to pixels per second
-    const int gravity{1000};
-    // integer to move sprite
-    int speed{250};
-    // obstacle Velocity
-    int obVel{-300};
-    // change jumpHeight to pixels per second
-    int jumpHeight{500};
-    bool IsJumping = false;
- 
-    // data for animation goes here
-    int frame{};
-    // Update the animation speed, takes 1 second then divides it by 12
-    const float updateTime{1.0/12};
-    // float to contain the running time data
-    float runningTime{};
     
-
-    // Locate and load the texture file in the resources folder
+        // Locate and load the texture file in the resources folder
     Texture2D scarfy =  LoadTexture("resources/scarfy.png");
     Texture2D obstacle = LoadTexture("resources/Raylib_logo.png");
-    // Rectangle that will contain the texture sprite
-    Rectangle scarfyRec;
-    scarfyRec.width = scarfy.width/6;
-    scarfyRec.height = scarfy.height;
-    scarfyRec.x = 0;
-    scarfyRec.y = 0; 
-    // Vector2 is the position of the line on X and Y axis
-    Vector2 scarfyPos;
-    scarfyPos.x = windowWidth/2 - scarfyRec.width/2;
-    scarfyPos.y = windowHeight - scarfyRec.height;
 
+    Anim scarfyAnim;
+    scarfyAnim.rec.width = scarfy.width/6; 
+    scarfyAnim.rec.height = scarfy.height;
+    scarfyAnim.rec.x = 0;
+    scarfyAnim.rec.y = 0;
+    scarfyAnim.pos.x = windowWidth/2 -scarfyAnim.rec.width/2;
+    scarfyAnim.pos.y = windowHeight - scarfyAnim.rec.height;
+    scarfyAnim.frame = 0;
+    scarfyAnim.updateTime = 1.0/12.0;
+    scarfyAnim.runningTime = 0.0;
+    
     //  Variables for obstacle
     Rectangle obRec;
     obRec.width = obstacle.width;
@@ -52,11 +43,55 @@ int main(){
     obPos.y = windowHeight - obRec.height;
 
 
+    // obstacle Velocity
+    int obVel{-300};
+
+    int velocity{10};
+    
+    const int gravity{1000};
+    // integer to move sprite
+    int speed{250};
+    // change jumpHeight to pixels per second
+    int jumpHeight{500};
+    bool IsJumping = false;
+    bool collision{};
+
+    const char* winnerText = nullptr;
+ 
+    // data for animation goes here // frame is in struct Anim
+    // int frame{};
+
+    // Update the animation speed, takes 1 second then divides it by 12
+    const float updateTime{1.0/12};
+    // float to contain the running time data
+    float runningTime{};
+    
+
+
+
 
     SetTargetFPS(60);
     while(!WindowShouldClose()){
         // Get time in seconds for the last frame drawn (delta time)
         const float deltaTime{GetFrameTime()};
+
+        Rectangle obstacleRec{
+		    obPos.x,
+		    obPos.y,
+		    obRec.height,
+		    obRec.width,
+	    };
+	    Rectangle scarfyRec{
+	        scarfyAnim.pos.x,
+	        scarfyAnim.pos.y,
+	        scarfyAnim.rec.height,
+	        scarfyAnim.rec.width	
+	    };
+
+	    if(CheckCollisionRecs(scarfyRec,obstacleRec)){
+	    	collision = true;
+	    }
+
         BeginDrawing();
 
             //     runningTime += deltaTime; 
@@ -64,7 +99,7 @@ int main(){
             //  if(runningTime >= updateTime){
             //     runningTime = 0.0;
             //     // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
-            //     scarfyRec.x = frame* scarfyRec.width;
+            //     scarfyAnim.x = frame* scarfyAnim.width;
             //     // Increment frame by 1, cycle through .png frames
             //     frame++;
             //     // if the frame count gets greater than 6
@@ -74,13 +109,11 @@ int main(){
             //  }
 	        // }
         
-        DrawTextureRec(scarfy,scarfyRec,scarfyPos,WHITE);
 
-        DrawTextureRec(obstacle, obRec, obPos, WHITE);
 
 
         // if scarfyPosY is greater or equal to 420
-        if (scarfyPos.y >= windowHeight - scarfyRec.height){
+        if (scarfyAnim.pos.y >= windowHeight - scarfy.height){
             // slow velocity
             velocity = 0;
             IsJumping = false;
@@ -92,49 +125,49 @@ int main(){
         }
 
         if(IsKeyDown(KEY_D) && !IsJumping){
-            scarfyPos.x = scarfyPos.x += speed*deltaTime;
-            scarfyRec.width = scarfy.width/6;
+            scarfyAnim.pos.x += speed*deltaTime;
+            scarfyAnim.rec.width = scarfy.width/6;
             
             
-            runningTime += deltaTime; 
+            scarfyAnim.runningTime += deltaTime; 
 
-             if(runningTime >= updateTime){
-                runningTime = 0.0;
+             if(scarfyAnim.runningTime >= scarfyAnim.updateTime){
+                scarfyAnim.runningTime = 0.0;
                 // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
-                scarfyRec.x = frame* scarfyRec.width;
+                scarfyAnim.rec.x = scarfyAnim.frame* scarfyAnim.rec.width;
                 // Increment frame by 1, cycle through .png frames
-                frame++;
+                scarfyAnim.frame++;
                 // if the frame count gets greater than 6
-             if (frame > 5){
+             if (scarfyAnim.frame > 5){
                 // set frame count back to zero in order to restart cycle through .png frames
-                frame = 0;
+                scarfyAnim.frame = 0;
              }
 	        }
         }
         // When D key is released and sprite is not jumping
         if(IsKeyReleased(KEY_D) && !IsJumping){
             // reset frame back to zero, revert sprite to first frame
-            frame = 0;
-            scarfyRec.x = frame * scarfyRec.width;
+            scarfyAnim.frame = 0;
+            scarfyAnim.rec.x = scarfyAnim.frame * scarfyAnim.rec.width;
         }
 
         if(IsKeyDown(KEY_A) && !IsJumping){
-            scarfyPos.x -= speed*deltaTime;
-            scarfyRec.width = -scarfy.width/6;
+	        scarfyAnim.pos.x -= speed*deltaTime;
+	        scarfyAnim.rec.width = -scarfy.width/6;
             
             
-            runningTime += deltaTime; 
+            scarfyAnim.runningTime += deltaTime;
 
-             if(runningTime >= updateTime){
-                runningTime = 0.0;
+             if(scarfyAnim.runningTime >= scarfyAnim.updateTime){
+                scarfyAnim.runningTime = 0.0;
                 // Create sprite animation, character rectangle on x axis is equal to frame integer multiplied rec width
-                scarfyRec.x = frame* scarfyRec.width;
+                scarfyAnim.rec.x = scarfyAnim.frame* scarfyAnim.rec.width;
                 // Increment frame by 1, cycle through .png frames
-                frame++;
+                scarfyAnim.frame++;
                 // if the frame count gets greater than 6
-             if (frame > 5){
+             if (scarfyAnim.frame > 5){
                 // set frame count back to zero in order to restart cycle through .png frames
-                frame = 0;
+                scarfyAnim.frame = 0;
              }
 	        }
         }
@@ -142,8 +175,8 @@ int main(){
                 // When A key is released and sprite is not jumping
         if(IsKeyReleased(KEY_A) && !IsJumping){
             // reset frame back to zero, revert sprite to first frame
-            frame = 0;
-            scarfyRec.x = frame * scarfyRec.width;
+            scarfyAnim.frame = 0;
+            scarfyAnim.rec.x = scarfyAnim.frame * scarfyAnim.rec.width;
         }
 
         // velocity = 0; if space is pressed, velocity = -10, making object jump.  and if IsJumping is not true, allow velocity(object) jump by -10
@@ -153,12 +186,22 @@ int main(){
              
         }
         // multiply velocity by delta time
-        scarfyPos.y += velocity * deltaTime;
+        scarfyAnim.pos.y += velocity * deltaTime;
         // add velocity to obstacle
         obPos.x += obVel * deltaTime;
 
         // Colour background of window
         ClearBackground(WHITE);
+
+        if(collision){
+            ClearBackground(RED);
+        } else {
+
+            DrawTextureRec(scarfy,scarfyAnim.rec,scarfyAnim.pos,WHITE);
+            DrawTextureRec(obstacle, obRec, obPos, WHITE);
+        }
+
+
         EndDrawing();
     }
     UnloadTexture(scarfy);
